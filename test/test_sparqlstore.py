@@ -1,4 +1,5 @@
-from rdflib import Graph, URIRef, Literal
+from rdflib import Graph, ConjunctiveGraph, URIRef, Literal
+from rdflib.plugins.stores.sparqlstore import SPARQLStore
 from urllib.request import urlopen
 from urllib.error import HTTPError
 import unittest
@@ -87,6 +88,34 @@ class SPARQLStoreDBPediaTestCase(unittest.TestCase):
             c += 1
 
         assert c == 5, "SPARQLStore() didn't return 5 records"
+
+
+class SPARQLStoreQuitStoreTestCase(unittest.TestCase):
+    store_name = "SPARQLStore"
+    path = "http://localhost:5000/sparql"
+    create = False
+
+    def test_query_via_get(self):
+        store = SPARQLStore(query_endpoint=self.path, method="GET")
+        self.execute_query_with_store(store)
+
+    def test_query_via_post(self):
+        store = SPARQLStore(query_endpoint=self.path, method="POST")
+        self.execute_query_with_store(store)
+
+    def test_query_via_post_form(self):
+        store = SPARQLStore(query_endpoint=self.path, method="POST_FORM")
+        self.execute_query_with_store(store)
+
+    def execute_query_with_store(self, store):
+        conjunctivegraph = ConjunctiveGraph(store=store)
+        graph = conjunctivegraph.get_context(URIRef("http://example.org/"))
+        query = "select distinct ?inst where {?inst a <http://example.org/Example>}"
+        res = graph.query(query, initNs={})
+        assert len(res) == 1
+        for i in res:
+            assert type(i[0]) == URIRef, i[0].n3()
+            assert i[0] == URIRef("http://example.org/ExampleInstance"), i[0].n3()
 
 
 class SPARQLStoreUpdateTestCase(unittest.TestCase):
