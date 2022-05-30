@@ -10,7 +10,7 @@ myst-parser
 pytest
 pytest-cov
 pytest-subtests
-sphinx<5
+sphinx<6
 sphinxcontrib-apidoc
 sphinxcontrib-kroki
 types-setuptools
