@@ -1321,31 +1321,16 @@ files = [
 ]
 
 [[package]]
-name = "types-docutils"
-version = "0.19.1.1"
-description = "Typing stubs for docutils"
-category = "dev"
-optional = false
-python-versions = "*"
-files = [
-    {file = "types-docutils-0.19.1.1.tar.gz", hash = "sha256:be0a51ba1c7dd215d9d2df66d6845e63c1009b4bbf4c5beb87a0d9745cdba962"},
-    {file = "types_docutils-0.19.1.1-py3-none-any.whl", hash = "sha256:a024cada35f0c13cc45eb0b68a102719018a634013690b7fef723bcbfadbd1f1"},
-]
-
-[[package]]
 name = "types-setuptools"
-version = "65.7.0.3"
+version = "67.5.0.0"
 description = "Typing stubs for setuptools"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-setuptools-65.7.0.3.tar.gz", hash = "sha256:c00f2dd1e6dcbb893faea4a57dbae80bb96d826b865d9ade8ae250a830cba10c"},
-    {file = "types_setuptools-65.7.0.3-py3-none-any.whl", hash = "sha256:b823969ea92a6d41d35933881d4c732248df834062e0d6f044c3eb36c446254e"},
+    {file = "types-setuptools-67.5.0.0.tar.gz", hash = "sha256:fa6f231eeb27e86b1d6e8260f73de300e91f99c205b9a5e21debd49f3726a849"},
+    {file = "types_setuptools-67.5.0.0-py3-none-any.whl", hash = "sha256:f7f4bf4ab777e88631d3a387bbfdd4d480a2a4693ca896130f8ef738370377b8"},
 ]
-
-[package.dependencies]
-types-docutils = "*"
 
 [[package]]
 name = "typing-extensions"
@@ -1413,4 +1398,4 @@ networkx = ["networkx"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "9d02b28eb490584cc2bd1accb2006ea12ee19991511dadf9971204c9697c235f"
+content-hash = "b3787a7d63d75c57867764673353e80651824789c202018d067afe7b9f5f2b19"
