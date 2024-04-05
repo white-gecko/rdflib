@@ -126,6 +126,8 @@ def rdf2dot(g: Graph, stream: TextIO, opts: Dict[str, Any] = {}):
         return "BLACK"
 
     stream.write('digraph { \n node [ fontname="DejaVu Sans" ] ; \n')
+    for k, v in opts.items():
+        stream.write(f" {k}={v}; \n")
 
     for s, p, o in g:
         sn = node(s)
