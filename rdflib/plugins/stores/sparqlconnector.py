@@ -9,11 +9,9 @@ from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from rdflib.query import Result
-from rdflib.term import BNode
 from rdflib.plugin import plugins
-from rdflib.query import ResultParser
-
+from rdflib.query import Result, ResultParser
+from rdflib.term import BNode
 from rdflib.util import FORMAT_MIMETYPE_MAP, RESPONSE_TABLE_FORMAT_MIMETYPE_MAP
 
 log = logging.getLogger(__name__)
@@ -35,7 +33,7 @@ class SPARQLConnector:
         self,
         query_endpoint: Optional[str] = None,
         update_endpoint: Optional[str] = None,
-        returnFormat: Optional[str] = None,
+        returnFormat: Optional[str] = None,  # noqa: N803
         method: te.Literal["GET", "POST", "POST_FORM"] = "GET",
         auth: Optional[Tuple[str, str]] = None,
         **kwargs,
