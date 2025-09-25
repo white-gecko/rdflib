@@ -39,8 +39,8 @@ if __name__ == "__main__":
     graph.add((dbr.Brisbane, dbo.populationTotal, Literal(2)))
 
     # EXAMPLE Update Store 2:
-    st = SPARQLUpdateStore(query_endpoint="http://localhost:3030/db/sparql", update_endpoint="http://localhost:3030/db/update")
-    graph = Graph(store=st, identifier="http://dbpedia.org")
+    update_store = SPARQLUpdateStore(query_endpoint="http://localhost:3030/db/sparql", update_endpoint="http://localhost:3030/db/update")
+    graph = Graph(store=update_store, identifier="http://dbpedia.org")
     graph.add((dbr["Category:Capitals_in_Europe"], RDF.type, SKOS.Concept))
     graph.add((dbr["Category:Holy_Grail"], RDF.type, SKOS.Concept))
     graph.add((dbr["Category:Hospital_ships_of_Japan"], RDF.type, SKOS.Concept))
