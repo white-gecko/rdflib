@@ -40,6 +40,6 @@ def test_example(example_file: Path) -> None:
     try:
         result.check_returncode()
     except subprocess.CalledProcessError as process_error:
-        if (process_error.returncode == 126):
+        if process_error.returncode == 126:
             pytest.skip("This test returned 126 indikating to skip it.")
         raise

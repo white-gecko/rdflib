@@ -1,13 +1,14 @@
 """
 Simple examples showing how to use the SPARQLStore
 """
-from urllib.request import urlopen
+
 import sys
+from urllib.request import urlopen
 
 from rdflib import Graph, Namespace, URIRef
-from rdflib.plugins.stores.sparqlstore import SPARQLUpdateStore, SPARQLStore
-from rdflib.term import Identifier, Literal
 from rdflib.namespace import RDF, SKOS
+from rdflib.plugins.stores.sparqlstore import SPARQLStore, SPARQLUpdateStore
+from rdflib.term import Identifier, Literal
 
 # Shows examples of the useage of SPARQLStore and SPARQLUpdateStore against local SPARQL1.1 endpoint if
 # available. This assumes SPARQL1.1 query/update endpoints running locally at
@@ -39,12 +40,14 @@ if __name__ == "__main__":
     graph.add((dbr.Brisbane, dbo.populationTotal, Literal(2)))
 
     # EXAMPLE Update Store 2:
-    update_store = SPARQLUpdateStore(query_endpoint="http://localhost:3030/db/sparql", update_endpoint="http://localhost:3030/db/update")
+    update_store = SPARQLUpdateStore(
+        query_endpoint="http://localhost:3030/db/sparql",
+        update_endpoint="http://localhost:3030/db/update",
+    )
     graph = Graph(store=update_store, identifier="http://dbpedia.org")
     graph.add((dbr["Category:Capitals_in_Europe"], RDF.type, SKOS.Concept))
     graph.add((dbr["Category:Holy_Grail"], RDF.type, SKOS.Concept))
     graph.add((dbr["Category:Hospital_ships_of_Japan"], RDF.type, SKOS.Concept))
-
 
     # EXAMPLE Store 1: using a Graph with the Store type string set to "SPARQLStore"
     graph = Graph("SPARQLStore", identifier="http://dbpedia.org")
@@ -84,7 +87,6 @@ if __name__ == "__main__":
         print(f"\t- {s}")
         if count >= 3:
             break
-
 
     # EXAMPLE Query 4: doing RDFlib triple navigation using a Graph() with a SPARQLStore backend
     print("Triple navigation using a Graph() with a SPARQLStore backend:")
