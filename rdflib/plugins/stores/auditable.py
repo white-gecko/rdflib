@@ -65,7 +65,9 @@ class AuditableStore(Store):
         ] = []
         self.rollbackLock = threading.RLock()
 
-    def open(self, configuration: str, create: bool = True) -> int | None:
+    def open(
+        self, configuration: str | tuple[str, str], create: bool = True
+    ) -> int | None:
         return self.store.open(configuration, create)
 
     def close(self, commit_pending_transaction: bool = False) -> None:

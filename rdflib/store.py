@@ -184,11 +184,13 @@ class Store:
     def create(self, configuration: str) -> None:
         self.dispatcher.dispatch(StoreCreatedEvent(configuration=configuration))
 
-    def open(self, configuration: str, create: bool = False) -> int | None:
-        """Opens the store specified by the configuration string.
+    def open(
+        self, configuration: str | tuple[str, str], create: bool = False
+    ) -> int | None:
+        """Opens the store specified by the configuration.
 
         Args:
-            configuration: Store configuration string
+            configuration: Store configuration as string or tuple
             create: If True, a store will be created if it doesn't exist.
                 If False and the store doesn't exist, an exception is raised.
 
