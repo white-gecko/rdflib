@@ -1,6 +1,8 @@
 """
 Simple examples showing how to use the SPARQLStore
 """
+from urllib.request import urlopen
+import sys
 
 from rdflib import Graph, Namespace, URIRef
 from rdflib.plugins.stores.sparqlstore import SPARQLUpdateStore, SPARQLStore
@@ -17,6 +19,14 @@ from rdflib.namespace import RDF, SKOS
 # ./fuseki-server --mem --update /db
 
 # THIS WILL ADD DATA TO THE /db dataset
+
+
+HOST = "http://localhost:3030"
+try:
+    assert len(urlopen(HOST).read()) > 0
+except Exception:
+    print(f"{HOST} is unavailable.")
+    sys.exit(126)
 
 if __name__ == "__main__":
     dbo = Namespace("http://dbpedia.org/ontology/")
