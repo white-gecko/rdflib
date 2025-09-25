@@ -3,15 +3,42 @@ Simple examples showing how to use the SPARQLStore
 """
 
 from rdflib import Graph, Namespace, URIRef
-from rdflib.plugins.stores.sparqlstore import SPARQLStore
-from rdflib.term import Identifier
+from rdflib.plugins.stores.sparqlstore import SPARQLUpdateStore, SPARQLStore
+from rdflib.term import Identifier, Literal
+from rdflib.namespace import RDF, SKOS
+
+# Shows examples of the useage of SPARQLStore and SPARQLUpdateStore against local SPARQL1.1 endpoint if
+# available. This assumes SPARQL1.1 query/update endpoints running locally at
+# http://localhost:3030/db/
+#
+# It uses the same endpoint as the test_dataset.py!
+#
+# For the tests here to run, you can for example start fuseki with:
+# ./fuseki-server --mem --update /db
+
+# THIS WILL ADD DATA TO THE /db dataset
 
 if __name__ == "__main__":
     dbo = Namespace("http://dbpedia.org/ontology/")
+    dbr = Namespace("http://dbpedia.org/resource/")
 
-    # EXAMPLE 1: using a Graph with the Store type string set to "SPARQLStore"
+    # EXAMPLE Update Store 1:
+    graph = Graph("SPARQLUpdateStore", identifier="http://dbpedia.org")
+    graph.open(("http://localhost:3030/db/sparql", "http://localhost:3030/db/update"))
+    graph.add((dbr.Berlin, dbo.populationTotal, Literal(3)))
+    graph.add((dbr.Brisbane, dbo.populationTotal, Literal(2)))
+
+    # EXAMPLE Update Store 2:
+    st = SPARQLUpdateStore(query_endpoint="http://localhost:3030/db/sparql", update_endpoint="http://localhost:3030/db/update")
+    graph = Graph(store=st, identifier="http://dbpedia.org")
+    graph.add((dbr["Category:Capitals_in_Europe"], RDF.type, SKOS.Concept))
+    graph.add((dbr["Category:Holy_Grail"], RDF.type, SKOS.Concept))
+    graph.add((dbr["Category:Hospital_ships_of_Japan"], RDF.type, SKOS.Concept))
+
+
+    # EXAMPLE Store 1: using a Graph with the Store type string set to "SPARQLStore"
     graph = Graph("SPARQLStore", identifier="http://dbpedia.org")
-    graph.open("http://dbpedia.org/sparql")
+    graph.open("http://localhost:3030/db/sparql")
 
     pop = graph.value(URIRef("http://dbpedia.org/resource/Berlin"), dbo.populationTotal)
     assert isinstance(pop, Identifier)
@@ -23,8 +50,8 @@ if __name__ == "__main__":
     )
     print()
 
-    # EXAMPLE 2: using a SPARQLStore object directly
-    st = SPARQLStore(query_endpoint="http://dbpedia.org/sparql")
+    # EXAMPLE Query 2: using a SPARQLStore object directly
+    st = SPARQLStore(query_endpoint="http://localhost:3030/db/sparql")
 
     for p in st.objects(
         URIRef("http://dbpedia.org/resource/Brisbane"), dbo.populationTotal
@@ -35,13 +62,12 @@ if __name__ == "__main__":
         )
     print()
 
-    # EXAMPLE 3: doing RDFlib triple navigation using SPARQLStore as a Graph()
+    # EXAMPLE Query 3: doing RDFlib triple navigation using SPARQLStore as a Graph()
     print("Triple navigation using SPARQLStore as a Graph():")
     graph = Graph("SPARQLStore", identifier="http://dbpedia.org")
-    graph.open("http://dbpedia.org/sparql")
+    graph.open("http://localhost:3030/db/sparql")
     # we are asking DBPedia for 3 skos:Concept instances
     count = 0
-    from rdflib.namespace import RDF, SKOS
 
     for s in graph.subjects(predicate=RDF.type, object=SKOS.Concept):
         count += 1
@@ -49,7 +75,21 @@ if __name__ == "__main__":
         if count >= 3:
             break
 
-    # EXAMPLE 4: using a SPARQL endpoint that requires Basic HTTP authentication
+
+    # EXAMPLE Query 4: doing RDFlib triple navigation using a Graph() with a SPARQLStore backend
+    print("Triple navigation using a Graph() with a SPARQLStore backend:")
+    st = SPARQLStore(query_endpoint="http://localhost:3030/db/sparql")
+    graph = Graph(store=st)
+    # we are asking DBPedia for 3 skos:Concept instances
+    count = 0
+
+    for s in graph.subjects(predicate=RDF.type, object=SKOS.Concept):
+        count += 1
+        print(f"\t- {s}")
+        if count >= 3:
+            break
+
+    # EXAMPLE Store 5: using a SPARQL endpoint that requires Basic HTTP authentication
     # NOTE: this example won't run since the endpoint isn't live (or real)
     sparql_store = SPARQLStore(
         query_endpoint="http://fake-sparql-endpoint.com/repository/x",
